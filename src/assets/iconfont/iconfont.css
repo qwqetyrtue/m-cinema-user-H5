@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "m-icon"; /* Project id 3979695 */
+  src: url('iconfont.woff2?t=1679923568217') format('woff2'),
+       url('iconfont.woff?t=1679923568217') format('woff'),
+       url('iconfont.ttf?t=1679923568217') format('truetype');
+}
+
+.m-icon {
+  font-family: "m-icon" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.m-icon-taobao:before {
+  content: "\e782";
+}
+
+.m-icon-weibo:before {
+  content: "\e66b";
+}
+
+.m-icon-qq:before {
+  content: "\e73e";
+}
+
+.m-icon-weixin:before {
+  content: "\e607";
+}
+
+.m-icon-telephone:before {
+  content: "\e8ad";
+}
+
+.m-icon-user:before {
+  content: "\e70d";
+}
+
+.m-icon-password:before {
+  content: "\e625";
+}
+

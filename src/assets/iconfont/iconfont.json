@@ -1,0 +1,58 @@
+{
+  "id": "3979695",
+  "name": "m-cinema-user",
+  "font_family": "m-icon",
+  "css_prefix_text": "m-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "11758479",
+      "name": "淘宝",
+      "font_class": "taobao",
+      "unicode": "e782",
+      "unicode_decimal": 59266
+    },
+    {
+      "icon_id": "599927",
+      "name": "微博",
+      "font_class": "weibo",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "1330577",
+      "name": "QQ",
+      "font_class": "qq",
+      "unicode": "e73e",
+      "unicode_decimal": 59198
+    },
+    {
+      "icon_id": "15933094",
+      "name": "微信",
+      "font_class": "weixin",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "11372650",
+      "name": "电话",
+      "font_class": "telephone",
+      "unicode": "e8ad",
+      "unicode_decimal": 59565
+    },
+    {
+      "icon_id": "4676491",
+      "name": "账号登录",
+      "font_class": "user",
+      "unicode": "e70d",
+      "unicode_decimal": 59149
+    },
+    {
+      "icon_id": "8594074",
+      "name": "密码",
+      "font_class": "password",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    }
+  ]
+}
