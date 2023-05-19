@@ -1,23 +1,44 @@
 <template>
-  <div class="film-card">
-    <div class="film-image">
-      <van-image style="width: 100%;height: 100%;border-radius: 5px;overflow: hidden" fit="fill"
-                 src="/img/shenghai.jpg"></van-image>
-      <div class="film-version">
-        <!--        中国巨幕-->
-        <van-tag color="rgb(0,0,0,0.5)" text-color="#FFFFFF" style="border-radius: 5px">中国巨幕3d</van-tag>
-      </div>
+    <div class="film-card" v-if="film">
+        <div class="film-image">
+            <van-image style="width: 100%;height: 100%;border-radius: 5px;overflow: hidden" fit="fill"
+                       @click="toDetail(film.filmId)"
+                       src="/img/shenghai.jpg"></van-image>
+            <div class="film-version">
+                <!--        中国巨幕-->
+                <van-tag color="rgb(0,0,0,0.5)" text-color="#FFFFFF" style="border-radius: 5px">中国巨幕3d</van-tag>
+            </div>
+        </div>
+        <div class="film-title">
+            <div>{{ film.name }}</div>
+            <van-button native-type="button" size="small" color="#F03D38" round class="flat-van-button"
+                        @click="toOrder(film.filmId)">
+                {{ button }}
+            </van-button>
+        </div>
     </div>
-    <div class="film-title">
-      <div>不休不止dwadwadwaddwa</div>
-      <van-button native-type="button" size="small" color="#F03D38" round class="flat-van-button">购票</van-button>
-    </div>
-  </div>
 </template>
 
 <script>
 export default {
-  components: {}
+    components: {},
+    props: {
+        film: {
+            type: Object
+        },
+        button: {
+            type: String,
+            default: '购票'
+        },
+    },
+    methods: {
+        toDetail(filmId) {
+            this.$router.push(`/film/detail/${filmId}`)
+        },
+        toOrder(filmId) {
+            this.$router.push(`/order/${filmId}`)
+        }
+    }
 }
 </script>
 

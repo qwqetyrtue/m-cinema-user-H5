@@ -4,6 +4,7 @@
       <van-icon name="search" :color="color"></van-icon>
       <van-notice-bar :scrollable="false" :color="color" :background="background" style="width: 100%;height: 100%">
         <van-swipe
+            @change="onChangeHandler"
             style="height: 40px;line-height: 40px;"
             vertical
             :autoplay="autoplay"
@@ -19,12 +20,22 @@
 <script>
 export default {
   name: "SearchJump",
-  methods: {},
+  data() {
+    return {
+      current: 0,
+    }
+  },
+  methods: {
+    onChangeHandler(index) {
+      this.current = index
+    },
+    jumpHandler() {
+      this.$router.push(`${this.to}?search=${this.list[this.current]}`)
+    }
+  },
   props: {
-    jumpHandler: {
-      type: Function,
-      default: () => {
-      }
+    to: {
+      type: String,
     },
     color: {
       type: String,

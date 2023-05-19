@@ -14,7 +14,7 @@ router.beforeEach(async (to, from, next) => {
             // 如果登陆了则跳转到首页
             next({path: '/'})
         } else {
-            const hasGetUserInfo = store.getters.user
+            const hasGetUserInfo = store.getters.user.name
             if (hasGetUserInfo) {
                 next()
             } else {
@@ -27,12 +27,6 @@ router.beforeEach(async (to, from, next) => {
                     next({...to, replace: true})
                 } catch (error) {
                     // remove token and go to login page to re-login
-                    await store.dispatch('auth/resetToken')
-                    Toast({
-                        message: error || 'Has Error',
-                        type: 'fail',
-                        duration: 5 * 1000
-                    })
                     next(`/login?redirect=${to.path}`)
                 }
             }

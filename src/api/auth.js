@@ -1,9 +1,9 @@
 import request from "@/utils/request"
+import '@/api/annotation'
 
 /**
  * 登陆请求
-
- * @return Promise({code,msg,data})
+ * @return {Promise<{code,msg,data}>}
  */
 export function loginReq(type, data) {
     let types = ['account', 'sms']
@@ -19,20 +19,20 @@ export function loginReq(type, data) {
 
 /**
  * 获取用户信息
- * @return Promise({code,msg,data})
+ * @return {Promise<{code,msg,data}>}
  */
 export function getUserInfoReq() {
     return request({
-        url: '',
+        url: '/api/user/auth/info',
         method: 'get',
     })
 }
 
 /**
  * 创建账户
- * @param phone
- * @param password
- * @return Promise({code,msg,data})
+ * @param {String} phone
+ * @param {String} password
+ * @return {Promise<{code,msg,data}>}
  */
 export function createAccountReq({phone, password}) {
     return request({
@@ -44,3 +44,5 @@ export function createAccountReq({phone, password}) {
         }
     })
 }
+
+

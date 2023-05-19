@@ -1,72 +1,128 @@
 <template>
-  <div class="index-container">
-    <van-pull-refresh v-model="pageLoading" @refresh="pageRefresh">
-      <van-cell style="background-color: #f8f8f8;">
-        <van-swipe>
-          <van-swipe-item v-for="each in [1,2,3,4,5]" :key="each">
-            <van-image fit="fill" :src="'/img/' + each +'.jpg'"></van-image>
-          </van-swipe-item>
-        </van-swipe>
-      </van-cell>
-      <van-cell style="background-color: #f8f8f8;">
-        <van-grid :border="false" :square="true" :column-num="5" :clickable="true">
-          <van-grid-item icon="photo-o" text="文字"/>
-          <van-grid-item icon="photo-o" text="文字"/>
-          <van-grid-item icon="photo-o" text="文字"/>
-          <van-grid-item icon="photo-o" text="文字"/>
-          <van-grid-item icon="photo-o" text="文字"/>
-        </van-grid>
-      </van-cell>
-      <div class="section-panel">
-        <van-cell title="正在热映" is-link value-class="title-tip" title-class="display-title">
-          全部45部
-        </van-cell>
-        <div class="film-card-cont">
-          <film-card v-for="each in films" :key="each + '1'"></film-card>
-        </div>
-      </div>
-      <div class="section-panel">
-        <van-cell title="待映推荐" is-link value-class="title-tip" title-class="display-title">
-          全部45部
-        </van-cell>
-        <div class="film-card-cont">
-          <film-card v-for="each in films" :key="each + '2'"></film-card>
-        </div>
-      </div>
-      <div class="section-panel">
-        <van-cell title="即将上映" is-link value-class="title-tip" title-class="display-title">
-          全部45部
-        </van-cell>
-        <div class="film-card-cont">
-          <film-card v-for="each in films" :key="each + '3'"></film-card>
-        </div>
-      </div>
-      <div class="index-foot"/>
-    </van-pull-refresh>
-  </div>
+    <div class="index-container">
+        <van-pull-refresh v-model="pageLoading" @refresh="pageRefresh">
+            <van-cell style="background-color: #f8f8f8;">
+
+                <van-swipe>
+                    <template v-if="advertisingList">
+                        <van-swipe-item v-for="each in advertisingList" :key="each.advertisingId"
+                                        @click="advertisingToHandler(each)">
+                            <van-image fit="fill" :src="each.img" :alt="each.name"></van-image>
+                        </van-swipe-item>
+                    </template>
+                    <van-swipe-item v-else>
+                    </van-swipe-item>
+                </van-swipe>
+
+            </van-cell>
+            <van-cell style="background-color: #f8f8f8;">
+                <van-grid column-num="5" gutter="5" center :border="false" clickable square>
+                    <van-grid-item icon-prefix="m-icon" icon="film-o" to="/film/index" replace text="电影"
+                                   style="color: #2789e8;"/>
+                    <van-grid-item icon="fire" to="/community/index" replace text="社区" style="color: #F03D38;"/>
+                </van-grid>
+            </van-cell>
+            <div class="section-panel">
+                <van-cell title="正在热映" is-link value-class="title-tip" title-class="display-title"
+                          to="/film/index?active=hot">
+                    全部{{ hotTotal }}部
+                </van-cell>
+                <div class="film-card-cont">
+                    <film-card v-for="each in hot" :key="each.filmId" :film="each"></film-card>
+                </div>
+            </div>
+            <div class="section-panel">
+                <van-cell title="待映推荐" is-link value-class="title-tip" title-class="display-title"
+                          to="/film/index?active=tobe">
+                    全部{{ tobeTotal }}部
+                </van-cell>
+                <div class="film-card-cont">
+                    <film-card v-for="each in tobe" :key="each.filmId" :film="each"></film-card>
+                </div>
+            </div>
+            <div class="section-panel">
+                <van-cell title="即将上映" is-link value-class="title-tip" title-class="display-title"
+                          to="/film/index?active=soon">
+                    全部{{ soonTotal }}部
+                </van-cell>
+                <div class="film-card-cont">
+                    <film-card v-for="each in soon" :key="each.filmId" :film="each"></film-card>
+                </div>
+            </div>
+            <div class="index-foot"/>
+        </van-pull-refresh>
+    </div>
 </template>
 
 <script>
 import FilmCard from "@/views/index/components/FilmCard.vue";
-import {Toast} from "vant";
+import {Dialog, Toast} from "vant";
+import {indexTypeFilmReq} from "@/api/film";
+import {advertisingIndexReq} from "@/api/advertising";
+import EmptyRow from "@/components/EmptyRow/index.vue";
 
 export default {
-  data() {
-    return {
-      current: 0,
-      films: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      pageLoading: false
-    }
-  },
-  methods: {
-    pageRefresh() {
-      this.pageLoading = false;
-      Toast('刷新成功');
+    name: 'Index',
+    data() {
+        return {
+            current: 0,
+            hotTotal: 0,
+            soonTotal: 0,
+            tobeTotal: 0,
+            advertisingList: null,
+            hot: [],
+            soon: [],
+            tobe: [],
+            pageLoading: false
+        }
     },
-  },
-  components: {
-    FilmCard
-  }
+    created() {
+        advertisingIndexReq()
+            .then(({msg, data}) => {
+                this.advertisingList = data.list
+            })
+        this.fetchData({})
+    },
+    methods: {
+        fetchData(params) {
+            indexTypeFilmReq('hot', params)
+                .then(({msg, data}) => {
+                    this.hot = data.list
+                    this.hotTotal = data.total
+                })
+            indexTypeFilmReq('tobe', params)
+                .then(({msg, data}) => {
+                    this.tobe = data.list
+                    this.tobeTotal = data.total
+                })
+            indexTypeFilmReq('soon', params)
+                .then(({msg, data}) => {
+                    this.soon = data.list
+                    this.soonTotal = data.total
+                })
+        },
+        pageRefresh() {
+            this.pageLoading = false;
+            Toast('刷新成功');
+        },
+        advertisingToHandler(advertising) {
+            Dialog.confirm({
+                title: `${advertising.name}`,
+                message: `即将跳转至活动`,
+            })
+                .then(() => {
+                    window.open(advertising.link, '_blank')
+                })
+                .catch(() => {
+                    // on cancel
+                });
+
+        }
+    },
+    components: {
+        EmptyRow,
+        FilmCard
+    }
 }
 </script>
 
@@ -87,12 +143,13 @@ export default {
     }
   }
 
+
   .section-panel {
     margin: 15px 15px;
     background-color: #FFFFFF;
     padding: 5px 10px;
     border-radius: 10px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 
     .van-cell {
       padding-left: 0;
@@ -120,7 +177,7 @@ export default {
   }
 
   .index-foot {
-    height: 50px;
+    height: 1px;
   }
 }
 </style>

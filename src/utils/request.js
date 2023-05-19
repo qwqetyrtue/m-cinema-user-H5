@@ -19,7 +19,7 @@ service.interceptors.request.use(
             // let each request carry token
             // ['X-Token'] is a custom headers key
             // please modify it according to the actual situation
-            config.headers['X-Token'] = getToken()
+            config.headers['m-cinema-user'] = getToken()
         }
         return config
     },
@@ -44,28 +44,25 @@ service.interceptors.response.use(
      */
     response => {
         const res = response.data
-
         // 返回0为成功,反之则操作失败
         if (res.code !== 0) {
-            Toast({
-                message: res.msg || 'Error',
-                type: 'fail',
-                duration: 5 * 1000
-            })
-
             // 处理登陆超时或者未登录
-            if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-                // to re-login
-                // MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-                //     confirmButtonText: 'Re-Login',
-                //     cancelButtonText: 'Cancel',
-                //     type: 'warning'
-                // }).then(() => {
-                //     store.dispatch('user/resetToken')
-                //         .then(() => {
-                //             location.reload()
-                //         })
-                // })
+            if (res.code === 503 || res.code === 504) {
+                store.dispatch('auth/logout')
+                    .then(() => {
+                        Toast({
+                            overlay: true,
+                            message: res.msg,
+                            type: 'fail',
+                            duration: 2 * 1000,
+                        })
+                    })
+            } else {
+                Toast(res.msg || 'Error', {
+                    overlay: true,
+                    type: 'fail',
+                    duration: 2 * 1000
+                })
             }
             return Promise.reject(new Error(res.msg || 'Error'))
         } else {
@@ -75,7 +72,7 @@ service.interceptors.response.use(
     error => {
         console.log('err' + error) // for debug
         Toast({
-            message: error.message,
+            message: error.message || 'Error',
             type: 'fail',
             duration: 5 * 1000
         })

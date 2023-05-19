@@ -1,16 +1,27 @@
 @font-face {
   font-family: "m-icon"; /* Project id 3979695 */
-  src: url('iconfont.woff2?t=1679923568217') format('woff2'),
-       url('iconfont.woff?t=1679923568217') format('woff'),
-       url('iconfont.ttf?t=1679923568217') format('truetype');
+  src: url('iconfont.woff2?t=1682567038785') format('woff2'),
+       url('iconfont.woff?t=1682567038785') format('woff'),
+       url('iconfont.ttf?t=1682567038785') format('truetype');
 }
 
 .m-icon {
   font-family: "m-icon" !important;
-  font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.m-icon-logout:before {
+  content: "\e646";
+}
+
+.m-icon-film:before {
+  content: "\e8ae";
+}
+
+.m-icon-film-o:before {
+  content: "\e8c4";
 }
 
 .m-icon-taobao:before {

@@ -1,101 +1,120 @@
 <template>
-  <div class="profile-container">
-    <!-- 头部包含头像,姓名,简介等信息-->
-    <van-row class="head-panel">
-      <van-col span="5" class="profile-avatar">
-        <van-image
-            round
-            width="55px"
-            height="55px"
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
-        />
-        <div class="profile-user-type">普通用户</div>
-      </van-col>
-      <van-col span="10">
-        <div class="profile-name">sharo111</div>
-        <div class="profile-level">
-          <span class="level">LV6</span>
-          <span class="exp">30/100</span>
-          <van-progress :show-pivot="false" stroke-width="2px" color="#ee0a24" :percentage="30"/>
+    <div class="profile-container">
+        <!-- 头部包含头像,姓名,简介等信息-->
+        <van-row class="head-panel">
+            <van-col span="5" class="profile-avatar">
+                <van-image
+                        round
+                        width="55px"
+                        height="55px"
+                        :src="user.avatar"
+                />
+                <div class="profile-user-type">普通用户</div>
+            </van-col>
+            <van-col span="10">
+                <div class="profile-name">{{ user.name }}</div>
+                <div class="profile-level">
+                    <span class="level">LV6</span>
+                    <span class="exp">30/100</span>
+                    <van-progress :show-pivot="false" stroke-width="2px" color="#ee0a24" :percentage="30"/>
+                </div>
+            </van-col>
+            <van-col span="4" offset="5" class="profile-link"></van-col>
+        </van-row>
+        <van-row class="sign-panel">
+            <van-col span="24">
+                {{ user.sign }}
+            </van-col>
+        </van-row>
+        <!-- 展示看过的电影和想看的电影 -->
+        <van-row class="film-panel" v-if="counts">
+            <van-col class="panel-item" :span="12">
+                <van-cell is-link to="/film/collect/want">
+                    <template v-slot:title>
+                        <div>
+                            <span class="show-strong">{{ counts['want'] || 0}}</span> 想看
+                        </div>
+                    </template>
+                </van-cell>
+            </van-col>
+            <van-col class="panel-item" :span="12">
+                <van-cell title="" is-link to="/film/collect/already">
+                    <template v-slot:title>
+                        <div>
+                            <span class="show-strong">{{ counts['already'] || 0}}</span> 看过
+                        </div>
+                    </template>
+                </van-cell>
+            </van-col>
+        </van-row>
+        <!-- 展示票务和优惠卷 -->
+        <van-row class="ticket-panel">
+            <div>我的订单</div>
+            <van-grid :border="false" :column-num="4" :clickable="true">
+                <van-grid-item icon="video-o" text="观影票" @click="$router.push('/ticket/index')"/>
+                <van-grid-item icon="coupon-o" text="优惠卷" @click="$router.push('/ticket/coupon')"/>
+            </van-grid>
+        </van-row>
+        <!-- 展示影评和获赞数 -->
+        <div class="post-panel">
+            <div>我的影评</div>
+            <van-col class="post-panel-item" :span="12">
+                <van-cell is-link>
+                    <template v-slot:title>
+                        <div>
+                            <span class="post-panel-strong">8</span> 篇
+                        </div>
+                    </template>
+                </van-cell>
+            </van-col>
+            <van-col class="post-panel-item" :span="12">
+                <van-cell title="" is-link>
+                    <template v-slot:title>
+                        <div>
+                            <span class="post-panel-strong">947</span> 点赞
+                        </div>
+                    </template>
+                </van-cell>
+            </van-col>
         </div>
-      </van-col>
-      <van-col span="4" offset="5" class="profile-link"></van-col>
-    </van-row>
-    <van-row class="sign-panel">
-      <van-col span="20">
-        对哇对哇打底袜的
-      </van-col>
-    </van-row>
-    <!-- 展示看过的电影和想看的电影 -->
-    <van-row class="film-panel">
-      <van-col class="panel-item" :span="12">
-        <van-cell is-link>
-          <template v-slot:title>
-            <div>
-              <span class="show-strong">8</span> 想看
-            </div>
-          </template>
-        </van-cell>
-      </van-col>
-      <van-col class="panel-item" :span="12">
-        <van-cell title="" is-link>
-          <template v-slot:title>
-            <div>
-              <span class="show-strong">0</span> 看过
-            </div>
-          </template>
-        </van-cell>
-      </van-col>
-    </van-row>
-    <!-- 展示票务和优惠卷 -->
-    <van-row class="ticket-panel">
-      <div>我的订单</div>
-      <van-grid :border="false" :column-num="4" :clickable="true">
-        <van-grid-item icon="video-o" text="观影票"/>
-        <van-grid-item icon="coupon-o" text="优惠卷" @click="showCoupon = true"/>
-      </van-grid>
-    </van-row>
-    <!-- 展示影评和获赞数 -->
-    <div class="post-panel">
-      <div>我的影评</div>
-      <van-col class="post-panel-item" :span="12">
-        <van-cell is-link>
-          <template v-slot:title>
-            <div>
-              <span class="post-panel-strong">8</span> 篇
-            </div>
-          </template>
-        </van-cell>
-      </van-col>
-      <van-col class="post-panel-item" :span="12">
-        <van-cell title="" is-link>
-          <template v-slot:title>
-            <div>
-              <span class="post-panel-strong">947</span> 点赞
-            </div>
-          </template>
-        </van-cell>
-      </van-col>
-    </div>
 
-    <div class="comment-panel">
+        <div class="comment-panel">
 
-    </div>
-    <div class="profile-foot">
+        </div>
+        <div class="profile-foot">
 
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-export default {
-  name: "Profile",
-  data() {
-    return {
+import {mapGetters} from "vuex";
+import {filmCollectCountReq} from "@/api/film";
+import {collectMap} from "@/utils/filter";
 
-    }
-  },
-  methods: {},
+export default {
+    created() {
+        filmCollectCountReq()
+            .then(({msg, data}) => {
+                let t = {};
+                for (let e of data) {
+                    t[collectMap[e.type]] = e.num
+                }
+                this.counts = t
+            })
+    },
+    name: "Profile",
+    data() {
+        return {
+            counts: null,
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'user'
+        ])
+    },
+    methods: {},
 }
 </script>
 
@@ -141,6 +160,7 @@ export default {
       padding: 1px 1px;
       width: 42px;
       margin-top: 2px;
+      font-style: italic;
     }
 
     .profile-level {
@@ -149,23 +169,23 @@ export default {
       position: relative;
       width: 100%;
 
-      & > span {
-        font-size: 12px;
-        font-weight: 500;
-        color: #8F8F8F;
-      }
-
       .level {
+        font-size: 11px;
         background-color: #2789e8;
         color: #FFFFFF;
-        font-weight: bold;
-        padding: 0 2px;
+        font-weight: 600;
+        font-style: italic;
+        padding: 1px 3px;
         position: absolute;
         left: 0;
         top: 0;
       }
 
       .exp {
+        font-weight: 500;
+        color: #8F8F8F;
+        font-size: 12px;
+        font-style: italic;
         position: absolute;
         right: 5px;
         top: 0;

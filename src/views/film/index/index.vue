@@ -1,8 +1,9 @@
 <template>
   <div class="film-container">
     <van-pull-refresh v-model="pageLoading" @refresh="pageRefresh">
-      <search-jump :jump-handler="toSearchHandler"/>
+      <search-jump to="/film/search"/>
       <van-tabs v-model="active"
+                @change="activeChangeHandler"
                 title-active-color="#F1364B"
                 title-inactive-color="#000000"
                 line-width="0"
@@ -10,34 +11,34 @@
         <van-row class="activity-panel">
           <van-image width="100%" height="100%" src="/img/1.jpg"></van-image>
         </van-row>
-        <van-tab title="热映">
+        <van-tab title="热映" name="hot">
           <van-list
               v-model="loading"
               :finished="finished"
               finished-text="没有更多了"
               @load="onLoad"
           >
-            <film-row v-for="item in list" :key="item" :title="item"/>
+            <film-row v-for="item in list" :key="item.filmId" :title="item" :film="item"/>
           </van-list>
         </van-tab>
-        <van-tab title="待映">
+        <van-tab title="待映" name="tobe">
           <van-list
               v-model="loading"
               :finished="finished"
               finished-text="没有更多了"
               @load="onLoad"
           >
-            <film-row v-for="item in list" :key="item" :title="item"/>
+            <film-row v-for="item in list" :key="item.filmId" :title="item" :film="item"/>
           </van-list>
         </van-tab>
-        <van-tab title="即将上映">
+        <van-tab title="即将上映" name="soon">
           <van-list
               v-model="loading"
               :finished="finished"
               finished-text="没有更多了"
               @load="onLoad"
           >
-            <film-row v-for="item in list" :key="item" :title="item"/>
+            <film-row v-for="item in list" :key="item.filmId" :title="item" :film="item"/>
           </van-list>
         </van-tab>
       </van-tabs>
@@ -49,38 +50,47 @@
 import FilmRow from "@/views/film/components/FilmRow";
 import SearchJump from "@/components/SearchJump/index.vue";
 import {Toast} from "vant";
+import {filmPageTypeFilmReq} from "@/api/film";
 
 export default {
   name: 'Film',
+  created() {
+    this.active = this.$route.query.active || 'hot'
+  },
   data() {
     return {
-      active: 0,
+      active: 'hot',
       list: [],
+      paging: {
+        pageNum: 1,
+        pageSize: 5,
+        total: 0,
+      },
       loading: false,
       finished: false,
       pageLoading: false,
     }
   },
   methods: {
-    toSearchHandler() {
-      this.$router.push('/film/search')
+    fetchData(type, params, paging) {
+      this.loading = true
+      filmPageTypeFilmReq(type, params, paging)
+          .then(({msg, data}) => {
+            for (let each of data.list)
+              this.list.push(each)
+            if (!data.hasNextPage) this.finished = true
+            else this.paging.pageNum++;
+            this.loading = false
+          })
+    },
+    activeChangeHandler(name, title) {
+      this.list = []
+      this.finished = false
+      this.paging.pageNum = 1
+      this.fetchData(this.active, {}, this.paging)
     },
     onLoad() {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1);
-        }
-
-        // 加载状态结束
-        this.loading = false;
-
-        // 数据全部加载完成
-        if (this.list.length >= 20) {
-          this.finished = true;
-        }
-      }, 1000);
+      this.fetchData(this.active, {}, this.paging)
     },
     pageRefresh() {
       this.pageLoading = false;

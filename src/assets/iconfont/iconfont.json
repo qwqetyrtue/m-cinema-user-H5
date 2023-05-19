@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9531585",
+      "name": "退出登陆",
+      "font_class": "logout",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "11372654",
+      "name": "电影",
+      "font_class": "film",
+      "unicode": "e8ae",
+      "unicode_decimal": 59566
+    },
+    {
+      "icon_id": "11372788",
+      "name": "电影",
+      "font_class": "film-o",
+      "unicode": "e8c4",
+      "unicode_decimal": 59588
+    },
+    {
       "icon_id": "11758479",
       "name": "淘宝",
       "font_class": "taobao",

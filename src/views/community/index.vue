@@ -1,12 +1,12 @@
 <template>
-<div class="community-container">
-  这是社区
-</div>
+    <div class="community-container">
+        <van-empty description="无更多内容"/>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "index"
+    name: "index"
 }
 </script>
 

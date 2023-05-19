@@ -15,7 +15,10 @@ const mutations = {
     },
     SET_USER: (state, user) => {
         state.user = user
-    }
+    },
+    RESET_USER: (state) => {
+        state.user = {}
+    },
 }
 
 const actions = {
@@ -37,10 +40,16 @@ const actions = {
         removeToken()
     },
     getUserInfo: ({commit, state}) => {
-        getUserInfoReq()
-            .then(data => {
-                commit('SET_USER', data)
-            })
+        return new Promise((resolve, reject) => {
+            getUserInfoReq()
+                .then(({data, msg, code}) => {
+                    commit('SET_USER', data)
+                    resolve(data)
+                })
+                .catch(error => {
+                    reject(error)
+                })
+        })
     }
 }
 
