@@ -5,7 +5,7 @@ function resolve(dir) {
     return path.join(__dirname, dir)
 }
 
-const port = process.env.port || process.env.npm_config_port || 9528 // dev port
+const port = process.env.port || process.env.npm_config_port || 9529 // dev port
 
 const name = "m-cinema"
 
